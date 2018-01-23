@@ -14,9 +14,6 @@ Sensor.prototype.getClone = function () {
     clone.id = this.id;
     return clone;
 };
-Sensor.prototype.getInfo = function () {
-    return 'this.name +  + this.oid';
-};
 
 Sensor.defaultProps = {
     uuid: null,

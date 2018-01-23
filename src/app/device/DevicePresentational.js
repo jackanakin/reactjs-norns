@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { Table, Pagination } from 'react-bootstrap';
 import PubSub from 'pubsub-js';
 import { toast } from 'react-toastify';
 import * as _AppUtil from '../../_util/AppUtil';
+import * as _PresentationalUtil from '../../_util/PresentationalUtil';
 
 import FormHeaderDefault from '../../component/_root/FormHeaderDefault';
 import FormPanelDefault from '../../component/_root/FormPanelDefault';
@@ -22,25 +24,45 @@ import AddButtonFormDefault from '../../component/button/AddButtonFormDefault';
 import DeviceContainer from './DeviceContainer';
 
 import Sensor from '../../entity/Sensor';
-import { Device } from '../../entity/Device';
+import Device from '../../entity/Device';
 
 export default class DevicePresentational extends Component {
+    constructor() {
+        super();
+    }
+
+    componentDidMount() {
+        if (this.props.match.params.id !== undefined && this.props.match.params.id != null) {
+            this.props.store.dispatch(DeviceContainer.fetchDevice(this.props.match.params.id));
+            this.props.history.push('/dispositivos');
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.match.params.id !== undefined && nextProps.match.params.id !== null) {
+            this.props.store.dispatch(DeviceContainer.fetchDevice(nextProps.match.params.id));
+            this.props.history.push('/dispositivos');
+        }
+    }
+
     render() {
         return (
             <div>
                 <div className="panel-body">
                     <PageHeaderDefault label="Dispositivos" />
                     <ul className="nav nav-tabs">
-                        <li className="active"><a href="#home" data-toggle="tab">Cadastro</a>
+                        <li id="liFormTab" className="active"><a href="#formTab" data-toggle="tab">Cadastro</a>
                         </li>
-                        <li><a href="#profile" data-toggle="tab">Localizar</a>
+                        <li id="liListTab"><a href="#listTab" data-toggle="tab">Localizar</a>
                         </li>
                     </ul>
                     <div className="tab-content" style={{ marginTop: 20 + 'px' }}>
-                        <div className="tab-pane fade in active" id="home">
-                            <DeviceForm store={this.props.store} />
+                        <div className="tab-pane fade in active" id="formTab">
+                            <DeviceForm store={this.props.store}
+                                history={this.props.history} />
                         </div>
-                        <div className="tab-pane fade" id="findInList">
+                        <div className="tab-pane fade" id="listTab">
+                            <DeviceList store={this.props.store} />
                         </div>
                     </div>
                 </div>
@@ -50,8 +72,8 @@ export default class DevicePresentational extends Component {
 }
 
 class DeviceForm extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             sensor: new Sensor(), device: new Device(),
             sensor_auto: false, sensorList: [], sensor_intervalList: [], deviceList: []
@@ -134,6 +156,11 @@ class DeviceForm extends Component {
         this.props.store.dispatch(DeviceContainer.resetSensor());
     }
 
+    resetDevice = () => {
+        this.props.history.push('/dispositivos');
+        this.props.store.dispatch(DeviceContainer.resetDevice());
+    }
+
     render() {
         return (
             <div className="row">
@@ -177,7 +204,7 @@ class DeviceForm extends Component {
                         </FormPanelDefault>
                         <SaveFormDefault onSubmit={this.props.onSubmit} />
                         <div style={{ display: 'inline', marginLeft: 20 + 'px' }} >
-                            <CancelFormDefault />
+                            <CancelFormDefault onClick={this.resetDevice} />
                         </div>
                     </form>
                 </div>
@@ -232,5 +259,96 @@ class SensorTable extends Component {
                 </tbody>
             </Table>
         );
+    }
+}
+
+class DeviceList extends Component {
+    constructor() {
+        super();
+        this.state = {
+            page: 1, size: 5,
+            totalPages: 1, deviceList: []
+        };
+    }
+    componentDidMount() {
+        this.props.store.dispatch(DeviceContainer.fetchDevicePage(this.state.size, this.state.page));
+    }
+
+    componentWillMount() {
+        this.props.store.subscribe(() => {
+            this.setState({ deviceList: this.props.store.getState().deviceReducer.deviceList });
+        });
+        this.props.store.subscribe(() => {
+            this.setState({ totalPages: this.props.store.getState().deviceReducer.totalPages });
+        });
+    }
+
+    pagination = (eventKey) => {
+        this.setState({
+            page: eventKey
+        });
+        this.props.store.dispatch(DeviceContainer.fetchDevicePage(this.state.size, eventKey));
+    }
+
+    showForm = () => {
+        _PresentationalUtil.gTriggerTabPanel('liListTab', 'listTab', 'liFormTab', 'formTab');
+    }
+
+    render() {
+        let body = this.state.deviceList.map(obj =>
+            <DeviceTR key={obj.id} obj={obj} onEdit={this.showForm} />
+        );
+
+        return (
+            <div>
+                <FormRowDefault>
+                    <Table bordered responsive
+                        hover striped style={{ marginTop: 20 + 'px' }}>
+                        <thead>
+                            <tr>
+                                <th>Endereço IP</th>
+                                <th>Porta</th>
+                                <th>Status</th>
+                                <th>Descrição</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>{body}</tbody>
+                    </Table>
+                </FormRowDefault>
+                <FormRowDefault>
+                    <Pagination
+                        first
+                        next
+                        prev
+                        last
+                        ellipsis
+                        items={this.state.totalPages}
+                        maxButtons={3}
+                        activePage={this.state.page}
+                        onSelect={this.pagination}
+                    />
+                </FormRowDefault>
+            </div>
+        );
+    }
+}
+
+class DeviceTR extends Component {
+    render() {
+        return (
+            <tr>
+                <td>{this.props.obj.ipv4}</td>
+                <td>{this.props.obj.port}</td>
+                <td>{this.props.obj.status.name}</td>
+                <td>{this.props.obj.description}</td>
+                <td>
+                    <Link to={`/dispositivos/${this.props.obj.id}`} >
+                        <i style={{ cursor: 'pointer', marginLeft: 5 + 'px', color: 'blue' }} className="fa fa-pencil fa-2x"
+                            onClick={this.props.onEdit.bind(this)} />
+                    </Link>
+                </td>
+            </tr>
+        )
     }
 }

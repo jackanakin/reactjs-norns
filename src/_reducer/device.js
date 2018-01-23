@@ -2,23 +2,45 @@ import * as _Action from './_action';
 import * as _AppUtil from '../_util/AppUtil';
 
 import Sensor from '../entity/Sensor';
-import Fruit from '../entity/Fruit';
-import { Device } from '../entity/Device';
+import Device from '../entity/Device';
 
 const initialState = {
     sensorList: [],
-    deviceList: [],
+    deviceList: [], totalPages: 1,
     sensor: new Sensor(),
     device: new Device()
 }
 
 export function deviceReducer(state = initialState, action) {
     switch (action.type) {
+        case _Action.SET_DEVICE: {
+            action.data.sensorList.forEach(function (entry) {
+                entry.uuid = _AppUtil.generateUUID();
+            });
+            return Object.assign({}, state, {
+                device: action.data, sensorList: action.data.sensorList
+            });
+        }
+
+        case _Action.PAGE_DEVICE: {
+            return Object.assign({}, state, {
+                deviceList: action.data.content, totalPages: action.data.totalPages
+            });
+        }
+
         case _Action.ADD_DEVICE: {
             return Object.assign({}, state, {
                 deviceList: [
                     ...state.deviceList
                 ]
+            });
+        }
+
+        case _Action.EDIT_DEVICE: {
+            let tempArray = state.deviceList;
+            tempArray[state.deviceList.findIndex(obj => obj.id === action.data.id)] = action.data;
+            return Object.assign({}, state, {
+                deviceList: tempArray
             });
         }
 
@@ -29,7 +51,9 @@ export function deviceReducer(state = initialState, action) {
         }
 
         case _Action.ADD_SENSOR: {
-            action.data.uuid = _AppUtil.generateUUID();
+            if (action.data.uuid === null || action.data.uuid === undefined) {
+                action.data.uuid = _AppUtil.generateUUID();
+            }
             return Object.assign({}, state, {
                 sensorList: [
                     ...state.sensorList,

@@ -6,6 +6,56 @@ import * as _action from '../../_reducer/_action';
 import ErrorValidatorHandler from '../../_util/ErrorValidatorHandler';
 
 export default class DeviceContainer {
+    static fetchDevice = (id) => {
+        return dispatch => {
+            $.ajax({
+                url: `${_AppUtil.apiURL}device/getById`,
+                dataType: 'json',
+                method: 'GET',
+                data: { id: id },
+                statusCode: {
+                    500: function (data) {
+                        _AppUtil.HTTP500();
+                    },
+                    400: function (data) {
+                        toast.warn("Dispositivo não encontrado !", {
+                            position: toast.POSITION.TOP_RIGHT,
+                            autoClose: false
+                        });
+                    },
+                    200: function (data) {
+                        dispatch({ type: _action.SET_DEVICE, data });
+                    },
+                    0: function () {
+                        _AppUtil.HTTP0();
+                    }
+                }
+            });
+        }
+    }
+
+    static fetchDevicePage = (size, page) => {
+        return dispatch => {
+            $.ajax({
+                url: `${_AppUtil.apiURL}device/page`,
+                method: 'GET',
+                dataType: 'json',
+                data: { size: size, page: page - 1 },
+                statusCode: {
+                    500: function (data) {
+                        _AppUtil.HTTP500();
+                    },
+                    200: function (data) {
+                        dispatch({ type: _action.PAGE_DEVICE, data });
+                    },
+                    0: function () {
+                        _AppUtil.HTTP0();
+                    }
+                }
+            });
+        }
+    }
+
     static saveDevice = (dataJSON) => {
         return dispatch => {
             $.ajax({
@@ -20,6 +70,7 @@ export default class DeviceContainer {
                     },
                     200: function (data) {
                         dispatch({ type: _action.RESET_DEVICE });
+                        dispatch({ type: _action.EDIT_DEVICE, data });
                         toast.info("Dispositivo adicionado !", {
                             position: toast.POSITION.TOP_RIGHT
                         });
@@ -94,6 +145,12 @@ export default class DeviceContainer {
                     }
                 }
             });
+        }
+    }
+
+    static resetDevice = () => {
+        return dispatch => {
+            dispatch({ type: _action.RESET_DEVICE });
         }
     }
 
