@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Table, Pagination } from 'react-bootstrap';
 import PubSub from 'pubsub-js';
 import { toast } from 'react-toastify';
-import * as _AppUtil from '../../_util/AppUtil';
 import * as _PresentationalUtil from '../../_util/PresentationalUtil';
 
 import FormHeaderDefault from '../../component/_root/FormHeaderDefault';
@@ -27,10 +26,6 @@ import Sensor from '../../entity/Sensor';
 import Device from '../../entity/Device';
 
 export default class DevicePresentational extends Component {
-    constructor() {
-        super();
-    }
-
     componentDidMount() {
         if (this.props.match.params.id !== undefined && this.props.match.params.id != null) {
             this.props.store.dispatch(DeviceContainer.fetchDevice(this.props.match.params.id));
@@ -76,17 +71,23 @@ class DeviceForm extends Component {
         super(props);
         this.state = {
             sensor: new Sensor(), device: new Device(),
-            sensor_auto: false, sensorList: [], sensor_intervalList: [], deviceList: []
+            sensor_auto: false, sensorList: [], deviceList: [],
+            //ENUM-LIST
+            sensor_intervalList: [], device_snmpList: []
         };
     }
 
     componentDidMount() {
         this.props.store.dispatch(DeviceContainer.fetchAllInterval());
+        this.props.store.dispatch(DeviceContainer.fetchAllSnmp());
     }
 
     componentWillMount() {
         this.props.store.subscribe(() => {
             this.setState({ sensor_intervalList: this.props.store.getState().enumReducer.sensor_intervalList });
+        });
+        this.props.store.subscribe(() => {
+            this.setState({ device_snmpList: this.props.store.getState().enumReducer.device_snmpList });
         });
         this.props.store.subscribe(() => {
             this.setState({ deviceList: this.props.store.getState().deviceReducer.deviceList });
@@ -173,6 +174,8 @@ class DeviceForm extends Component {
                                     label="Endereço IPv4*" id="device_ipv4" format="###.###.###.###" />
                                 <InputNumberMaskForm type="text" value={this.state.device.port} onChange={this.saveEntity.bind(this, 'port', "device")}
                                     label="Porta (SNMP)*" id="device_port" />
+                                <SelectFormDefault value={this.state.device.snmp} onChange={this.saveEntity.bind(this, "snmp", "device")}
+                                    data={this.state.device_snmpList} id="device_snmp" label="Protocolo SNMP*" />
                                 <InputTextFormDefault value={this.state.device.description} onChange={this.saveEntity.bind(this, 'description', "device")}
                                     label="Descrição" id="device_description" />
                                 <SwitchFormDefault value={this.state.device.status} onChange={this.saveEntity.bind(this, 'status', "device", !this.state.device.status)}

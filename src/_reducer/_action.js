@@ -1,4 +1,5 @@
 export const LIST_INTERVAL = 'LIST_INTERVAL';
+export const LIST_SNMP = 'LIST_SNMP';
 
 export const ADD_SENSOR = 'ADD_SENSOR';
 export const SET_SENSOR = 'SET_SENSOR';

@@ -10,7 +10,7 @@ import Home from './app/home/Home';
 import DevicePresentational from './app/device/DevicePresentational';
 
 import reducer from './_reducer';
-import { Provider } from 'react-redux'
+//import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 

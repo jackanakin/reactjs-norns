@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PubSub from 'pubsub-js';
-import * as _AppUtil from '../../_util/AppUtil';
 
 import FormRowDefault from '../_root/FormRowDefault';
 

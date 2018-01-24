@@ -20,6 +20,6 @@ Sensor.defaultProps = {
     id: null,
     name: '',
     oid: '',
-    interval: '',
+    interval: 'THREEHUNDRED',
     status: true
 };

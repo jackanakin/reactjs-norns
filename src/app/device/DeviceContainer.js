@@ -90,6 +90,26 @@ export default class DeviceContainer {
         }
     }
 
+    static fetchAllSnmp = () => {
+        return dispatch => {
+            $.ajax({
+                url: `${_AppUtil.apiURL}enumerated/list/snmp`,
+                dataType: 'json',
+                statusCode: {
+                    500: function (data) {
+                        _AppUtil.HTTP500();
+                    },
+                    200: function (data) {
+                        dispatch({ type: _action.LIST_SNMP, data });
+                    },
+                    0: function () {
+                        _AppUtil.HTTP0();
+                    }
+                }
+            });
+        }
+    }
+
     static fetchAllInterval = () => {
         return dispatch => {
             $.ajax({
