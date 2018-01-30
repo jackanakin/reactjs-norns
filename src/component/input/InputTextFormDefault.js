@@ -24,6 +24,7 @@ export default class InputTextFormDefault extends Component {
                         <input type="text" id={this.props.id} maxLength={this.props.maxLength} value={this.props.value} onChange={this.props.onChange}
                             className="form-control col-md-7 col-xs-12" />
                     </div>
+                    {this.props.children}
                     {validationSpan}
                 </div>
             </FormRowDefault>

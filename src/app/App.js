@@ -43,6 +43,9 @@ class MenuNavBar extends Component {
         <div className="sidebar-nav navbar-collapse">
           <ul className="nav" id="side-menu">
             <li>
+              <Link to="/configuracoes"><i className="fa fa-cogs fa-fw"></i> Configurações </Link>
+            </li>
+            <li>
               <Link to="/"><i className="fa fa-dashboard fa-fw"></i> Início </Link>
             </li>
             <li>
@@ -59,6 +62,7 @@ class MenuNavBar extends Component {
                 </li>
               </ul>
             </li>
+
           </ul>
         </div>
       </div>

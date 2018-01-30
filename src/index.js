@@ -7,6 +7,7 @@ import '../node_modules/font-awesome/css/font-awesome.min.css';
 
 import App from './app/App';
 import Home from './app/home/Home';
+import ConfigurationPresentational from './app/configuration/ConfigurationPresentational';
 import DevicePresentational from './app/device/DevicePresentational';
 
 import reducer from './_reducer';
@@ -23,6 +24,9 @@ ReactDOM.render((
         <App>
             <Switch>
                 <Route exact path="/" component={Home} />
+                <Route path='/configuracoes' render={(props) => (
+                    <ConfigurationPresentational {...props} store={store} />
+                )} />
                 <Route path='/dispositivos/:id?' render={(props) => (
                     <DevicePresentational {...props} store={store} />
                 )} />

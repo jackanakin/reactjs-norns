@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-
-import NumberFormat from 'react-number-format';
 import PubSub from 'pubsub-js';
 
 import FormRowDefault from '../_root/FormRowDefault';
 
-export default class InputNumberMaskForm extends Component {
+export default class InputPasswordFormDefault extends Component {
     constructor() {
         super();
         this.state = { validationStyle: null, validationMessage: null };
@@ -20,16 +18,16 @@ export default class InputNumberMaskForm extends Component {
         return (
             <FormRowDefault>
                 <div className={this.state.validationStyle}>
-                    <label className="col-md-3 col-sm-3 col-xs-6" htmlFor={this.props.id}> {this.props.label}
+                    <label className="col-md-3 col-sm-3 col-xs-6" htmlFor={this.props.id}>{this.props.label}
                     </label>
                     <div className="col-md-3 col-sm-3 col-xs-6">
-                        <NumberFormat type={this.props.type} format={this.props.format} mask={this.props.mask}
-                            className="form-control col-md-7 col-xs-12" id={this.props.id} value={this.props.value} onChange={this.props.onChange} />
+                        <input type="password" id={this.props.id} maxLength={this.props.maxLength} value={this.props.value} onChange={this.props.onChange}
+                            className="form-control col-md-7 col-xs-12" placeholder={this.props.placeholder} />
                     </div>
                     {this.props.children}
                     {validationSpan}
                 </div>
-            </FormRowDefault >
+            </FormRowDefault>
         );
     }
 

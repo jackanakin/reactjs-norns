@@ -168,7 +168,7 @@ class DeviceForm extends Component {
                 <div className="col-lg-12">
                     <form onSubmit={this.submitForm} method="post" autoComplete="off" >
                         <FormPanelDefault>
-                            <FormHeaderDefault label="Configurações Gerais" />
+                            <FormHeaderDefault label="Dispositivos" />
                             <div className="panel-body">
                                 <InputNumberMaskForm type="text" value={this.state.device.ipv4} onChange={this.saveEntity.bind(this, 'ipv4', "device")}
                                     label="Endereço IPv4*" id="device_ipv4" format="###.###.###.###" />
@@ -229,7 +229,7 @@ class SensorTR extends Component {
                         onClick={this.props.onRemove.bind(this,
                             this.props.obj.uuid
                         )} />
-                    <i style={{ cursor: 'pointer', marginLeft: 5 + 'px', color: 'blue' }} className="fa fa-pencil fa-2x"
+                    <i style={{ cursor: 'pointer', marginLeft: 5 + 'px', color: 'blue' }} className="fa fa-edit fa-2x"
                         onClick={this.props.onEdit.bind(this,
                             this.props.obj.uuid
                         )} />
