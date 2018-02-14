@@ -31,14 +31,20 @@ export default class InputPasswordFormDefault extends Component {
         );
     }
 
+    shouldComponentUpdate(nextProps) {
+        return this.props.value !== nextProps.value;
+    }
+
     componentDidMount() {
         PubSub.subscribe("validation-error", function (topico, error) {
             if (error.code === this.props.id) {
                 this.setState({ validationMessage: error.defaultMessage, validationStyle: 'has-warning' });
+                this.forceUpdate();
             }
         }.bind(this));
         PubSub.subscribe("clean-validation-error", function (topico) {
             this.setState({ validationMessage: null, validationStyle: null });
+            this.forceUpdate();
         }.bind(this));
     }
 }

@@ -6,6 +6,32 @@ import * as _action from '../../_reducer/_action';
 import ErrorValidatorHandler from '../../_util/ErrorValidatorHandler';
 
 export default class ConfigurationContainer {
+    static removeSifCollector = (id) => {
+        return dispatch => {
+            $.ajax({
+                url: `${_AppUtil.apiURL}configuration/remove-collector`,
+                method: 'GET',
+                contentType: 'application/json',
+                data: { id: id },
+                statusCode: {
+                    500: function (data) {
+                        _AppUtil.HTTP500();
+                    },
+                    200: function (data) {
+                        dispatch({ type: _action.REM_SIFCOLLECTOR, data: id });
+                        dispatch({ type: _action.RESET_SIFCOLLECTOR });
+                        toast.info("Coletor removido !", {
+                            position: toast.POSITION.TOP_RIGHT
+                        });
+                    },
+                    0: function () {
+                        _AppUtil.HTTP0();
+                    }
+                }
+            });
+        }
+    }
+
     static setSifCollector = (obj) => {
         return dispatch => {
             dispatch({ type: _action.SET_SIFCOLLECTOR, data: obj });
@@ -15,7 +41,7 @@ export default class ConfigurationContainer {
     static fetchAllSifCollector = () => {
         return dispatch => {
             $.ajax({
-                url: `${_AppUtil.apiURL}configuration/list-all`,
+                url: `${_AppUtil.apiURL}configuration/list-sifcollector`,
                 method: 'GET',
                 dataType: 'json',
                 statusCode: {

@@ -9,6 +9,14 @@ const initialState = {
 
 export function configurationReducer(state = initialState, action) {
     switch (action.type) {
+        case _Action.REM_SIFCOLLECTOR: {
+            return Object.assign({}, state, {
+                sifCollectorList: [
+                    ...state.sifCollectorList.filter(obj => obj.id !== action.data)
+                ]
+            });
+        }
+
         case _Action.EDIT_SIFCOLLECTOR: {
             let tempArray = state.sifCollectorList;
             tempArray[state.sifCollectorList.findIndex(obj => obj.id === action.data.id)] = action.data;
@@ -20,7 +28,7 @@ export function configurationReducer(state = initialState, action) {
         case _Action.SET_SIFCOLLECTOR: {
             let obj = action.data;
             return Object.assign({}, state, {
-                sifCollector: new SifCollector(obj.id, obj.identifier, obj.description, obj.databaseUrl, obj.status)
+                sifCollector: new SifCollector(obj.id, obj.identifier, obj.description, obj.databaseUrl, obj.status.id === 'ENABLED' ? true : false)
             });
         }
 

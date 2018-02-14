@@ -10,4 +10,8 @@ export default class PageHeaderDefault extends Component {
             </div>
         );
     }
+
+    shouldComponentUpdate(nextProps) {
+        return this.props.label !== nextProps.label;
+    }
 }

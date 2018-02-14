@@ -66,8 +66,7 @@ class SifConfiguration extends Component {
     }
 
     removeSifCollector = (id) => {
-        console.log(id);
-        //this.props.store.dispatch(DeviceContainer.removeSensor(uuid));
+        this.props.store.dispatch(ConfigurationContainer.removeSifCollector(id));
     }
 
     editSifCollector = (obj) => {
@@ -77,7 +76,6 @@ class SifConfiguration extends Component {
     resetSifCollector = () => {
         this.props.store.dispatch(ConfigurationContainer.resetSifCollector());
     }
-
 
     saveCollector = (e) => {
         e.preventDefault();
@@ -154,8 +152,8 @@ class SifCollectorTable extends Component {
                 hover striped style={{ marginTop: 20 + 'px' }}>
                 <thead>
                     <tr>
-                        <th>Identificador</th>
                         <th>Descrição</th>
+                        <th>Identificador</th>
                         <th>URL do banco de dados</th>
                         <th>Status</th>
                         <th>Ações</th>
@@ -173,10 +171,10 @@ class SifCollectorTR extends Component {
     render() {
         return (
             <tr>
-                <td>{this.props.obj.identifier}</td>
                 <td>{this.props.obj.description}</td>
+                <td>{this.props.obj.identifier}</td>
                 <td>{this.props.obj.databaseUrl}</td>
-                <td>{this.props.obj.status_name}</td>
+                <td>{this.props.obj.status.name}</td>
                 <td>
                     <i style={{ cursor: 'pointer', marginLeft: 5 + 'px', color: 'red' }} className="fa fa-trash-o fa-2x"
                         onClick={this.props.onRemove.bind(this,

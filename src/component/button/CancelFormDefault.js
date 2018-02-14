@@ -8,4 +8,8 @@ export default class CancelFormDefault extends Component {
                 style={{ width: 120 + 'px' }}>Cancelar</Button>
         );
     }
+
+    shouldComponentUpdate(nextProps) {
+        return this.props.onClick !== nextProps.onClick;
+    }
 }

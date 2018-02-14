@@ -8,4 +8,8 @@ export default class AddButtonFormDefault extends Component {
                 type="button" className="btn btn-primary form-control col-md-7 col-xs-12">Adicionar</Button>
         );
     }
+
+    shouldComponentUpdate(nextProps) {
+        return this.props.onClick !== nextProps.onClick;
+    }
 }

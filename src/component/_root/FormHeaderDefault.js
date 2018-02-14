@@ -8,4 +8,8 @@ export default class FormHeaderDefault extends Component {
             </div>
         );
     }
+
+    shouldComponentUpdate(nextProps) {
+        return this.props.label !== nextProps.label;
+    }
 }

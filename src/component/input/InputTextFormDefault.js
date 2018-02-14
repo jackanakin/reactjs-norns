@@ -21,8 +21,9 @@ export default class InputTextFormDefault extends Component {
                     <label className="col-md-3 col-sm-3 col-xs-6" htmlFor={this.props.id}>{this.props.label}
                     </label>
                     <div className="col-md-3 col-sm-3 col-xs-6">
-                        <input type="text" id={this.props.id} maxLength={this.props.maxLength} value={this.props.value} onChange={this.props.onChange}
-                            className="form-control col-md-7 col-xs-12" />
+                        <input type={this.props.type === undefined ? 'text' : this.props.type} id={this.props.id}
+                            maxLength={this.props.maxLength} value={this.props.value} onChange={this.props.onChange}
+                            className="form-control col-md-7 col-xs-12" entity={this.props.entity} field={this.props.field} />
                     </div>
                     {this.props.children}
                     {validationSpan}
@@ -31,14 +32,20 @@ export default class InputTextFormDefault extends Component {
         );
     }
 
+    shouldComponentUpdate(nextProps) {
+        return this.props.value !== nextProps.value;
+    }
+
     componentDidMount() {
         PubSub.subscribe("validation-error", function (topico, error) {
             if (error.code === this.props.id) {
                 this.setState({ validationMessage: error.defaultMessage, validationStyle: 'has-warning' });
+                this.forceUpdate();
             }
         }.bind(this));
         PubSub.subscribe("clean-validation-error", function (topico) {
             this.setState({ validationMessage: null, validationStyle: null });
+            this.forceUpdate();
         }.bind(this));
     }
 }

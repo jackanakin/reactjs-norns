@@ -8,4 +8,8 @@ export default class SaveFormDefault extends Component {
                 type="submit" className="btn btn-success">Salvar</Button>
         );
     }
+
+    shouldComponentUpdate(nextProps) {
+        return this.props.onSubmit !== nextProps.onSubmit;
+    }
 }

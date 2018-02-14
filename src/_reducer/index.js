@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux';
 import { deviceReducer } from './device';
-import { enumReducer } from './enum';
 import { configurationReducer } from './configuration'
+import { deviceProfileReducer } from './deviceProfile'
 
 const rootReducer = combineReducers({
     deviceReducer: deviceReducer,
-    enumReducer: enumReducer,
-    configurationReducer: configurationReducer
+    configurationReducer: configurationReducer,
+    deviceProfileReducer: deviceProfileReducer
 });
 
 export default rootReducer;

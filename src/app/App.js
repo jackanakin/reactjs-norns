@@ -46,23 +46,17 @@ class MenuNavBar extends Component {
               <Link to="/configuracoes"><i className="fa fa-cogs fa-fw"></i> Configurações </Link>
             </li>
             <li>
+              <Link to="/perfis-de-dispositivos"><i className="fa fa-address-book-o fa-fw"></i> Perfis de dispositivos </Link>
+            </li>
+            <li>
               <Link to="/"><i className="fa fa-dashboard fa-fw"></i> Início </Link>
             </li>
             <li>
               <a href="index.html"><i className="fa fa-dashboard fa-fw"></i> Dashboard</a>
             </li>
             <li>
-              <a href="#"><i className="fa fa-bar-chart-o fa-fw"></i> Sensores<span className="fa arrow"></span></a>
-              <ul className="nav nav-second-level">
-                <li>
-                  <Link to="/"><i className="fa fa-dashboard fa-fw"></i> Sensores </Link>
-                </li>
-                <li>
-                  <Link to="/dispositivos"><i className="fa fa-server fa-lg"></i> Dispositivos </Link>
-                </li>
-              </ul>
+              <Link to="/dispositivos"><i className="fa fa-server fa-lg"></i> Dispositivos </Link>
             </li>
-
           </ul>
         </div>
       </div>

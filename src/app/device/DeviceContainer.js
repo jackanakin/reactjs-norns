@@ -39,10 +39,11 @@ export default class DeviceContainer {
             $.ajax({
                 url: `${_AppUtil.apiURL}device/page`,
                 method: 'GET',
-                dataType: 'json',
+                contentType: 'json',
                 data: { size: size, page: page - 1 },
                 statusCode: {
                     500: function (data) {
+                        console.log(data);
                         _AppUtil.HTTP500();
                     },
                     200: function (data) {
@@ -56,14 +57,14 @@ export default class DeviceContainer {
         }
     }
 
-    static saveDevice = (dataJSON) => {
+    static saveDevice = (successCallback, obj) => {
         return dispatch => {
             $.ajax({
                 url: `${_AppUtil.apiURL}device/save`,
                 contentType: 'application/json',
                 dataType: 'json',
                 type: 'POST',
-                data: dataJSON,
+                data: JSON.stringify(obj),
                 statusCode: {
                     500: function (data) {
                         _AppUtil.HTTP500();
@@ -71,9 +72,16 @@ export default class DeviceContainer {
                     200: function (data) {
                         dispatch({ type: _action.RESET_DEVICE });
                         dispatch({ type: _action.EDIT_DEVICE, data });
-                        toast.info("Dispositivo adicionado !", {
-                            position: toast.POSITION.TOP_RIGHT
-                        });
+                        successCallback();
+                        if (obj.id == null) {
+                            toast.info("Dispositivo adicionado !", {
+                                position: toast.POSITION.TOP_RIGHT
+                            });
+                        } else {
+                            toast.info("Dispositivo atualizado !", {
+                                position: toast.POSITION.TOP_RIGHT
+                            });
+                        }
                     },
                     400: function (data) {
                         new ErrorValidatorHandler().publicaErros(data.responseJSON);
@@ -83,6 +91,87 @@ export default class DeviceContainer {
                         });
                     },
                     0: function (data) {
+                        _AppUtil.HTTP0();
+                    }
+                }
+            });
+        }
+    }
+
+    static fetchAllSifCollector = () => {
+        return dispatch => {
+            $.ajax({
+                url: `${_AppUtil.apiURL}configuration/listFilter-sifcollector`,
+                method: 'GET',
+                dataType: 'json',
+                statusCode: {
+                    500: function (data) {
+                        _AppUtil.HTTP500();
+                    },
+                    200: function (data) {
+                        dispatch({ type: _action.LIST_SIFCOLLECTOR, data });
+                    },
+                    0: function () {
+                        _AppUtil.HTTP0();
+                    }
+                }
+            });
+        }
+    }
+
+    static fetchAllSensorKind = () => {
+        return dispatch => {
+            $.ajax({
+                url: `${_AppUtil.apiURL}enumerated/list-sensorkind`,
+                dataType: 'json',
+                statusCode: {
+                    500: function (data) {
+                        _AppUtil.HTTP500();
+                    },
+                    200: function (data) {
+                        dispatch({ type: _action.LIST_SENSORKIND, data });
+                    },
+                    0: function () {
+                        _AppUtil.HTTP0();
+                    }
+                }
+            });
+        }
+    }
+
+    static fetchDeviceCommunityProfile = () => {
+        return dispatch => {
+            $.ajax({
+                url: `${_AppUtil.apiURL}device-profile/listFilter-community-profile`,
+                dataType: 'json',
+                statusCode: {
+                    500: function (data) {
+                        _AppUtil.HTTP500();
+                    },
+                    200: function (data) {
+                        dispatch({ type: _action.LIST_DEVICEPROFILECOMMUNITY, data });
+                    },
+                    0: function () {
+                        _AppUtil.HTTP0();
+                    }
+                }
+            });
+        }
+    }
+
+    static fetchDeviceAuthenticationProfile = () => {
+        return dispatch => {
+            $.ajax({
+                url: `${_AppUtil.apiURL}device-profile/listFilter-authentication-profile`,
+                dataType: 'json',
+                statusCode: {
+                    500: function (data) {
+                        _AppUtil.HTTP500();
+                    },
+                    200: function (data) {
+                        dispatch({ type: _action.LIST_DEVICEAUTHPROFILE, data });
+                    },
+                    0: function () {
                         _AppUtil.HTTP0();
                     }
                 }
@@ -183,6 +272,12 @@ export default class DeviceContainer {
     static setSensor = (uuid) => {
         return dispatch => {
             dispatch({ type: _action.SET_SENSOR, data: uuid });
+        }
+    }
+
+    static setTabKey = (key) => {
+        return dispatch => {
+            dispatch({ type: _action.SET_TABKEY, data: key });
         }
     }
 
