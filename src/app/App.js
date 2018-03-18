@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify';
 
+import { Nav, NavItem } from 'react-bootstrap';
+
 export default class App extends Component {
   render() {
     return (
@@ -14,7 +16,7 @@ export default class App extends Component {
           closeOnClick
           pauseOnHover
         />
-        <nav className="navbar navbar-default navbar-static-top" role="navigation" style={{ marginBottom: 0 }}>
+        <nav className="navbar navbar-default navbar-static-top" role="navigation" style={{ marginBottom: 0, borderColor: 'black' }}>
           <TopNavBar />
           <MenuNavBar />
         </nav>
@@ -41,7 +43,7 @@ class MenuNavBar extends Component {
     return (
       <div className="navbar-default sidebar" role="navigation">
         <div className="sidebar-nav navbar-collapse">
-          <ul className="nav" id="side-menu">
+          <ul className="nav myMenuNavBar" id="side-menu">
             <li>
               <Link to="/configuracoes"><i className="fa fa-cogs fa-fw"></i> Configurações </Link>
             </li>
@@ -68,32 +70,19 @@ class TopNavBar extends Component {
   render() {
     return (
       <div>
-        <div className="navbar-header">
-          <button type="button" className="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span className="sr-only">Toggle navigation</span>
-            <span className="icon-bar"></span>
-            <span className="icon-bar"></span>
-            <span className="icon-bar"></span>
-          </button>
-          <a className="navbar-brand" href="index.html">SB Admin v2.0</a>
-        </div>
-
-        <ul className="nav navbar-top-links navbar-right">
-          <li className="dropdown">
-            <a className="dropdown-toggle" data-toggle="dropdown" href="#">
-              <i className="fa fa-user fa-fw"></i> <i className="fa fa-caret-down"></i>
-            </a>
-            <ul className="dropdown-menu dropdown-user">
-              <li><a href="#"><i className="fa fa-user fa-fw"></i> User Profile</a>
-              </li>
-              <li><a href="#"><i className="fa fa-gear fa-fw"></i> Settings</a>
-              </li>
-              <li className="divider"></li>
-              <li><a href="login.html"><i className="fa fa-sign-out fa-fw"></i> Logout</a>
-              </li>
-            </ul>
-          </li>
-        </ul>
+        <Nav className="myTopNavBar" pullRight>
+          <NavItem eventKey={1} href="#" style={{ display: 'inline-block' }}>
+            <span className="fa-stack myTopNavBarItems">
+              <i className="fa fa-tree fa-stack-1x"></i>
+              <i className="fa fa-folder-o fa-stack-2x"></i>
+            </span>
+          </NavItem>
+          <NavItem eventKey={2} href="#" style={{ display: 'inline-block' }}>
+            <span className="fa-stack myTopNavBarItems">
+              <i className="fa fa-user-circle-o fa-stack-2x"></i>
+            </span>
+          </NavItem>
+        </Nav>
       </div>
     );
   }

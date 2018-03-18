@@ -1,0 +1,31 @@
+
+/* 
+    TOP NAV BAR
+*/
+.myTopNavBar {
+    max-height: 30px;
+    min-height: 30px !important;
+}
+.myTopNavBarItems {
+    color: black;
+}
+.myTopNavBarItems *:hover {
+    color: black;
+}
+
+/*
+    MENU NAV BAR
+*/
+.myMenuNavBar * {
+    color: black;
+}
+.myMenuNavBar *:hover {
+    color: black;
+}
+
+/*
+    FORM TAB
+*/
+.myFormTabItem{
+    color: black !important;
+}

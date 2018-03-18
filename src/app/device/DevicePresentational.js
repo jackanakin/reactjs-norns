@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Table, Pagination, Tab, Tabs } from 'react-bootstrap';
 import PubSub from 'pubsub-js';
 import { toast } from 'react-toastify';
+import { Button } from 'react-bootstrap';
 
 import FormHeaderDefault from '../../component/_root/FormHeaderDefault';
 import FormPanelDefault from '../../component/_root/FormPanelDefault';
@@ -88,11 +89,11 @@ class DevicePresentational extends Component {
                     <PageHeaderDefault label="Dispositivos" />
                     <Tabs defaultActiveKey={this.state.tabKey} activeKey={this.state.tabKey}
                         onSelect={this.handleTabChange} id="configurationTab">
-                        <Tab style={{ marginTop: 20 + 'px' }} eventKey={1} title="Cadastro">
+                        <Tab tabClassName="myFormTabItem" style={{ marginTop: 20 + 'px' }} eventKey={1} title="Cadastro">
                             <DeviceForm store={this.props.store} loadDataTable={this.loadDataTable}
                                 history={this.props.history} />
                         </Tab>
-                        <Tab eventKey={2} title="Localizar">
+                        <Tab className="myFormTabItem" eventKey={2} title="Localizar">
                             <DeviceList store={this.props.store} data={this.state} loadDataTable={this.loadDataTable} />
                         </Tab>
                     </Tabs>
@@ -182,6 +183,12 @@ class DeviceForm extends Component {
         this.props.store.dispatch(DeviceContainer.resetDevice());
     }
 
+    scanDeviceSensors = () => {
+        PubSub.publish("clean-validation-error", {});
+        toast.dismiss();
+        this.props.store.dispatch(DeviceContainer.scanDeviceSensors(this.state.device));
+    }
+
     render() {
         return (
             <div className="row">
@@ -212,8 +219,12 @@ class DeviceForm extends Component {
                         <FormPanelDefault>
                             <FormHeaderDefault label="Sensores" />
                             <div className="panel-body">
-                                <SwitchFormDefault disabled value={this.state.sensor_auto} onChange={this.handleChange}
-                                    id="sensor_method" label="Método" offText="MANUAL" onText="AUTOMÁTICO" offColor="warning" field="sensor_auto" />
+                                <FormRowDefault>
+                                    <label className="col-md-3 col-sm-3 col-xs-6" />
+                                    <div className="col-md-3 col-sm-3 col-xs-6">
+                                        <Button className="form-control" bsStyle="info" onClick={this.scanDeviceSensors}>SNMP Scanner</Button>
+                                    </div>
+                                </FormRowDefault>
                                 <SelectFormDefault value={this.state.sensor.sensorKind} labelField={'name'} onChange={this.handleChange}
                                     data={this.state.device_sensorKindList} id="sensor_sensorKind" label="Tipo" field="sensorKind" entity="sensor" />
                                 <InputTextFormDefault value={this.state.sensor.name} onChange={this.handleChange}
@@ -230,18 +241,22 @@ class DeviceForm extends Component {
                                 <SwitchFormDefault value={this.state.sensor.status} onChange={this.handleChange} field="status" entity="sensor"
                                     offText="NÃO" onText="SIM" offColor="danger" onColor="success" id="sensor_status" label="Habilitado" />
                                 <FormRowDefault>
-                                    <div className="col-md-3 col-sm-3 col-xs-6" />
-                                    <AddButtonFormDefault onClick={this.addSensor} />
-                                    <CancelAddDefault onClick={this.resetSensor} />
+                                    <label className="col-md-3 col-sm-3 col-xs-6" />
+                                    <div className="col-md-3 col-sm-3 col-xs-6">
+                                        <AddButtonFormDefault className="form-control" onClick={this.addSensor} />
+                                        <CancelAddDefault className="form-control" onClick={this.resetSensor} />
+                                    </div>
                                 </FormRowDefault>
-
                                 <SensorTable data={this.state.sensorList} store={this.props.store} />
                             </div>
                         </FormPanelDefault>
-                        <SaveFormDefault onSubmit={this.props.onSubmit} />
-                        <div style={{ display: 'inline', marginLeft: 20 + 'px' }} >
-                            <CancelFormDefault onClick={this.resetDevice} />
-                        </div>
+                        <FormRowDefault>
+                            <label className="col-md-3 col-sm-3 col-xs-6" />
+                            <div className="col-md-3 col-sm-3 col-xs-6">
+                                <SaveFormDefault className="form-control" onSubmit={this.props.onSubmit} />
+                                <CancelFormDefault className="form-control" onClick={this.resetDevice} />
+                            </div>
+                        </FormRowDefault>
                     </form>
                 </div>
             </div>

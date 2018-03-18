@@ -6,6 +6,36 @@ import * as _action from '../../_reducer/_action';
 import ErrorValidatorHandler from '../../_util/ErrorValidatorHandler';
 
 export default class DeviceContainer {
+    static scanDeviceSensors = (device) => {
+        return dispatch => {
+            $.ajax({
+                url: `${_AppUtil.apiURL}device/scan-device`,
+                contentType: 'application/json',
+                dataType: 'json',
+                type: 'POST',
+                data: JSON.stringify(device),
+                statusCode: {
+                    500: function (data) {
+                        _AppUtil.HTTP500();
+                    },
+                    400: function (data) {
+                        new ErrorValidatorHandler().publicaErros(data.responseJSON);
+                        toast.warn("Para executar o SNMP Scanner verifique os campos obrigatórios !", {
+                            position: toast.POSITION.TOP_RIGHT,
+                            autoClose: false
+                        });
+                    },
+                    200: function (data) {
+                        console.log(data);
+                    },
+                    0: function () {
+                        _AppUtil.HTTP0();
+                    }
+                }
+            });
+        }
+    }
+
     static fetchDevice = (id) => {
         return dispatch => {
             $.ajax({
@@ -289,4 +319,5 @@ export default class DeviceContainer {
             });
         }
     }
+
 }

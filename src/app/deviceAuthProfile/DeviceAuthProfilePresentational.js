@@ -34,11 +34,6 @@ export default class DeviceAuthProfilePresentational extends Component {
             </div>
         );
     }
-
-    componentWillUnmount(){
-        console.log("unmount");
-        window.removeEventListener('resize', this.resizeListener);
-    }
 }
 
 class DeviceAuthenticationProfileForm extends Component {
